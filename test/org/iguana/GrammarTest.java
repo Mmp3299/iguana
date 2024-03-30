@@ -14,7 +14,8 @@ import org.iguana.util.serialization.ParseStatisticsSerializer;
 import org.iguana.util.serialization.RecognizerStatisticsSerializer;
 import org.iguana.util.visualization.ParseTreeToDot;
 import org.iguana.utils.input.Input;
-import org.iguana.utils.io.FileUtils;
+import org.iguana.utils.io.FileReadUtil;
+import org.iguana.utils.io.FileWriteUtil;
 import org.iguana.utils.visualization.DotGraph;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DynamicTest;
@@ -35,7 +36,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static org.iguana.iggy.IggyParserUtils.fromIggyGrammarPath;
-import static org.iguana.utils.io.FileUtils.readFile;
+import static org.iguana.utils.io.FileReadUtil.readFile;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class GrammarTest {
@@ -131,7 +132,7 @@ public class GrammarTest {
         return () -> {
             if (recognizer.recognize(input, start)) {
                 String statisticsPath = testPath + "/statistics" + j + ".json";
-                RecognizerStatistics expectedStatistics = RecognizerStatisticsSerializer.deserialize(FileUtils.readFile(statisticsPath));
+                RecognizerStatistics expectedStatistics = RecognizerStatisticsSerializer.deserialize(FileReadUtil.readFile(statisticsPath));
 
                 assertEquals(expectedStatistics, recognizer.getStatistics());
             }
@@ -162,7 +163,7 @@ public class GrammarTest {
             if (REGENERATE_FILES || !Files.exists(Paths.get(statisticsPath))) {
                 record(parser.getStatistics(), statisticsPath);
             } else {
-                ParseStatistics expectedStatistics = ParseStatisticsSerializer.deserialize(FileUtils.readFile(statisticsPath));
+                ParseStatistics expectedStatistics = ParseStatisticsSerializer.deserialize(FileReadUtil.readFile(statisticsPath));
                 assertEquals(expectedStatistics, parser.getStatistics());
             }
 
@@ -207,7 +208,7 @@ public class GrammarTest {
 
     private static void record(Object obj, String path) throws IOException {
         String json = JsonSerializer.serialize(obj);
-        FileUtils.writeFile(json, path);
+        FileWriteUtil.writeFile(json, path);
     }
 
     private static List<String> getTests(String rootPath) {

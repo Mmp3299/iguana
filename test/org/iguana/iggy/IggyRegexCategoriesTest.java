@@ -8,7 +8,7 @@ import org.iguana.regex.RegularExpression;
 import org.iguana.regex.RegularExpressionExamples;
 import org.iguana.regex.Token;
 import org.iguana.utils.input.Input;
-import org.iguana.utils.io.FileUtils;
+import org.iguana.utils.io.FileReadUtil;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -22,7 +22,7 @@ public class IggyRegexCategoriesTest {
     @Test
     public void testIggyGrammar() throws IOException {
         String path = Paths.get("src/resources/Iguana.iggy").toAbsolutePath().toString();
-        String inputString = FileUtils.readFile(path);
+        String inputString = FileReadUtil.readFile(path);
 
         IguanaTokenizer iguanaTokenizer = new IguanaTokenizer(IggyRegexCategories.getCategories());
         iguanaTokenizer.prepare(Input.fromString(inputString), 0);
