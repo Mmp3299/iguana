@@ -2,6 +2,7 @@ package org.iguana.utils.visualization;
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
@@ -64,16 +65,19 @@ public class DotGraph {
         }
 
         int exitCode = process.waitFor();
-
-        BufferedReader errorStream = new BufferedReader(new InputStreamReader(process.getErrorStream()));
-
-        String line;
-        while ((line = errorStream.readLine()) != null) {
-            System.out.println(line);
+        if (exitCode != 0) {
+            logErrors(process);
+        throw new RuntimeException("Graphviz process exited with error.");
         }
+    }
 
-        if (exitCode != 0)
-            throw new RuntimeException("");
+    private void logErrors(Process process) throws IOException {
+        try (BufferedReader errorStream = new BufferedReader(new InputStreamReader(process.getErrorStream()))) {
+            String line;
+            while ((line = errorStream.readLine()) != null) {
+                System.out.println(line);
+            }
+        }
     }
 
     private static String escape(String s) {
