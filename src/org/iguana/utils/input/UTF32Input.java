@@ -11,12 +11,12 @@ class UTF32Input extends AbstractInput {
 
     private final int[] characters;
 
-    private final int length;
+    private final int charLength;
 
     UTF32Input(int[] characters, int length, int lineCount, URI uri) {
         super(lineCount, uri);
         this.characters = characters;
-        this.length = length;
+        this.charLength = length;
     }
 
     @Override
@@ -29,7 +29,7 @@ class UTF32Input extends AbstractInput {
      */
     @Override
     public int length() {
-        return length;
+        return charLength;
     }
 
     @Override
@@ -58,7 +58,8 @@ class UTF32Input extends AbstractInput {
         List<Character> charList = new ArrayList<>();
 
         for (int i = start; i < end; i++) {
-            if (characters[i] == -1) continue;
+            boolean isEOF = characters[i] == EOF;
+            if (isEOF) continue;
             char[] chars = Character.toChars(characters[i]);
             for (char c : chars) {
                 charList.add(c);
