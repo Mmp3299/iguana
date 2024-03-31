@@ -8,18 +8,19 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.iguana.generator.GeneratorUtils.writeToJavaFile;
-import static org.iguana.utils.string.StringUtil.toFirstUpperCase;
+
 
 public class GenerateParserFiles extends Generator {
 
     private final String parserGenDirectory;
-    private final String className;
+
     private final List<String> metaSymbolNodes = Arrays.asList("Opt", "Star", "Plus", "Group", "Alt", "Start");
 
     public GenerateParserFiles(RuntimeGrammar grammar, String grammarName, String packageName, String genDirectory) {
         super(grammar, grammarName, packageName, genDirectory);
         this.parserGenDirectory = new File(genDirectory, "parser").getAbsolutePath();
-        this.className = toFirstUpperCase(grammarName);
+        computeClassName();
+
     }
 
     public void generate() {

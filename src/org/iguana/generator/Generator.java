@@ -12,10 +12,14 @@ import java.util.function.Function;
 
 public abstract class Generator {
 
+    protected String className;
+
     protected final RuntimeGrammar grammar;
     protected final String grammarName;
     protected final String packageName;
     protected final String genDirectory;
+
+
 
     public Generator(RuntimeGrammar grammar, String grammarName, String packageName, String genDirectory) {
         this.grammar = grammar;
@@ -37,10 +41,14 @@ public abstract class Generator {
         return symbol.getLabel();
     }
 
+    protected void computeClassName() {
+        this.className = org.iguana.utils.string.StringUtil.toFirstUpperCase(grammarName);
+    }
     /**
      *
      * @param f a function from the nonterminal name to the generated string
      */
+
     protected void generateTypes(StringBuilder sb, Function<String, String> f) {
         for (Map.Entry<Nonterminal, List<RuntimeRule>> entry : grammar.getDefinitions().entrySet()) {
             String nonterminalName = entry.getKey().getName();

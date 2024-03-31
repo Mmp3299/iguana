@@ -27,12 +27,13 @@ public class GeneratePsiElements extends Generator {
 
     private final List<String> metaSymbolNodes = Arrays.asList("Opt", "Star", "Plus", "Group", "Alt", "Start");
     private final String psiGenDirectory;
-    private final String className;
+
 
     public GeneratePsiElements(RuntimeGrammar grammar, String grammarName, String packageName, String genDirectory) {
         super(grammar, grammarName, packageName, genDirectory);
         this.psiGenDirectory = new File(genDirectory, "psi").getAbsolutePath();
-        this.className = toFirstUpperCase(grammarName);
+        computeClassName();
+
     }
 
     public void generate() {
