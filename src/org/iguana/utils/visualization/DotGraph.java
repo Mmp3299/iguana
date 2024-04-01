@@ -67,7 +67,7 @@ public class DotGraph {
         int exitCode = process.waitFor();
         if (exitCode != 0) {
             logErrors(process);
-        throw new RuntimeException("Graphviz process exited with error.");
+        throw new RuntimeException("Process exited with error.");
         }
     }
 

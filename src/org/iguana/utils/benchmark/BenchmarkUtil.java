@@ -29,8 +29,7 @@ package org.iguana.utils.benchmark;
 
 import com.google.common.testing.GcFinalization;
 
-import java.lang.management.ManagementFactory;
-import java.lang.management.ThreadMXBean;
+
 
 public class BenchmarkUtil {
 
@@ -40,17 +39,6 @@ public class BenchmarkUtil {
         return (int) ((runtime.totalMemory() - runtime.freeMemory()) / mb);
     }
 
-    public static long getUserTime() {
-        ThreadMXBean bean = ManagementFactory.getThreadMXBean();
-        return bean.isCurrentThreadCpuTimeSupported() ? bean.getCurrentThreadUserTime() : 0L;
-    }
-
-    public static long getSystemTime() {
-        ThreadMXBean bean = ManagementFactory.getThreadMXBean();
-        return bean.isCurrentThreadCpuTimeSupported()
-                ? (bean.getCurrentThreadCpuTime() - bean.getCurrentThreadUserTime())
-                : 0L;
-    }
 
     public static void awaitFullGC() {
         GcFinalization.awaitFullGc();

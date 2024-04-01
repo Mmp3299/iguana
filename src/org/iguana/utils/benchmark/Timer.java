@@ -1,5 +1,8 @@
 package org.iguana.utils.benchmark;
 
+import java.lang.management.ManagementFactory;
+import java.lang.management.ThreadMXBean;
+
 public class Timer {
 
     private long startNanoTime;
@@ -18,14 +21,14 @@ public class Timer {
         }
         running = true;
         startNanoTime = System.nanoTime();
-        startSystemTime = BenchmarkUtil.getSystemTime();
-        startUserTime = BenchmarkUtil.getUserTime();
+        startSystemTime = getSystemTime();
+        startUserTime = getUserTime();
     }
 
     public void stop() {
         endNanoTime = System.nanoTime();
-        endSystemTime = BenchmarkUtil.getSystemTime();
-        endUserTime = BenchmarkUtil.getUserTime();
+        endSystemTime = getSystemTime();
+        endUserTime = getUserTime();
     }
 
     public void reset() {
@@ -42,12 +45,17 @@ public class Timer {
         return endNanoTime - startNanoTime;
     }
 
-    public long getUserTime() {
-        return endUserTime - startUserTime;
+
+    public static long getUserTime() {
+        ThreadMXBean bean = ManagementFactory.getThreadMXBean();
+        return bean.isCurrentThreadCpuTimeSupported() ? bean.getCurrentThreadUserTime() : 0L;
     }
 
-    public long getSystemTime() {
-        return endSystemTime - startSystemTime;
+    public static long getSystemTime() {
+        ThreadMXBean bean = ManagementFactory.getThreadMXBean();
+        return bean.isCurrentThreadCpuTimeSupported()
+                ? (bean.getCurrentThreadCpuTime() - bean.getCurrentThreadUserTime())
+                : 0L;
     }
 
 }
