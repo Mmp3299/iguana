@@ -21,14 +21,14 @@ public class Timer {
         }
         running = true;
         startNanoTime = System.nanoTime();
-        startSystemTime = getSystemTime();
-        startUserTime = getUserTime();
+        startSystemTime = getCurrentSystemTime();
+        startUserTime = getCurrentUserTime();
     }
 
     public void stop() {
         endNanoTime = System.nanoTime();
-        endSystemTime = getSystemTime();
-        endUserTime = getUserTime();
+        endSystemTime = getCurrentSystemTime();
+        endUserTime = getCurrentUserTime();
     }
 
     public void reset() {
@@ -45,13 +45,16 @@ public class Timer {
         return endNanoTime - startNanoTime;
     }
 
+    public long getUserTime() { return endUserTime - startUserTime; }
 
-    public static long getUserTime() {
+    public long getSystemTime() { return endSystemTime - startSystemTime; }
+
+    public static long getCurrentUserTime() {
         ThreadMXBean bean = ManagementFactory.getThreadMXBean();
         return bean.isCurrentThreadCpuTimeSupported() ? bean.getCurrentThreadUserTime() : 0L;
     }
 
-    public static long getSystemTime() {
+    public static long getCurrentSystemTime() {
         ThreadMXBean bean = ManagementFactory.getThreadMXBean();
         return bean.isCurrentThreadCpuTimeSupported()
                 ? (bean.getCurrentThreadCpuTime() - bean.getCurrentThreadUserTime())
